@@ -31,6 +31,17 @@ Network::Network(int num_layers, vector<int> num_neurons){
             }
         }
     }
+    
+    //Adding bias node and edges
+    Neuron * bias_node = new Neuron(1.0);
+    for (int i = 1 ; i < num_layers ; i++){
+        for (int j = 0; j < num_neurons[i]; j++){
+            float randVal = (float)( (rand()%100000)/100000.0) ;
+            Edge * e = new Edge(randVal, bias_node, graph[i][j]);
+            bias_node->addOutEdge(e);
+            graph[i][j]->addInEdge(e);
+        }
+    }
 }
 
 void Network::printNetwork(){
