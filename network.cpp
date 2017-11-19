@@ -3,6 +3,7 @@
 #include "network.h"
 #include <time.h>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -42,6 +43,41 @@ Network::Network(int num_layers, vector<int> num_neurons){
             graph[i][j]->addInEdge(e);
         }
     }
+}
+
+void Network::loadData(string path, string delimiter){
+    ifstream myfile(path);
+    string line;
+    if (myfile.is_open()){
+        while (getline(myfile, line)){
+            size_t pos = 0;
+            vector<float> input;
+            string token;
+            while ((pos = line.find(delimiter)) != string::npos){
+                token = line.substr(0, pos);
+                input.push_back(atof(token.c_str()));
+                line.erase(0, pos + delimiter.length());
+            }
+            input.push_back(atof(line.c_str()));
+            data.push_back(input);
+        }
+    }
+    return;
+}
+
+void Network::printData(){
+    for (int i =0 ; i < data.size() ; i++){
+        for (int j = 0 ; j < data[i].size(); j++){
+            cout<<data[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    return;
+}
+
+
+vector<vector<float> > Network::getData(){
+    return data;
 }
 
 void Network::printNetwork(){

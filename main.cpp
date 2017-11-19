@@ -7,9 +7,10 @@ int main(){
     num_neurons[0] = 3;
     num_neurons[1] = 2;
     num_neurons[2] = 1;
-
+    
     Network * nn = new Network(num_layers, num_neurons);
-    nn->printNetwork();
-
+    //nn->printNetwork();
+    nn->loadData("data/IRIS.csv", ",");
+    nn->printData();
     return 0;
 }

@@ -4,13 +4,18 @@
 
 #include "neuron.h"
 #include "edge.h"
+#include <string>
+using namespace std;
 
 class Network{
     private:
-        std::vector< std::vector< Neuron *> > graph;
-
+        vector<vector<Neuron *> > graph;
+        vector<vector<float> > data;
     public:
-        Network(int NUM_LAYERS,  std::vector<int> NUM_NEURONS);       
+        Network(int NUM_LAYERS, vector<int> NUM_NEURONS);
+        void loadData(string path,string delimiter);
+        vector<vector<float> > getData(); 
+        void printData();
         void printNetwork();
 };
 
