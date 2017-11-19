@@ -4,6 +4,7 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 using namespace std;
 
@@ -78,6 +79,50 @@ void Network::printData(){
 
 vector<vector<float> > Network::getData(){
     return data;
+}
+
+void Network::loadInput(int index){
+    for (int i = 0 ; i < graph[0].size(); i++){
+        graph[0][i] = data[index][i];
+    }
+    return;
+}
+
+
+float Network::sigmoid(float value){
+    //approximation of sigmoid function. Faster to compute
+    return (value/(1+abs(value)));
+}
+
+void Network::forwardPropagation(){
+    for (int i = 1 ; i < graph.size(); i++){
+        for (int j = 0; j < graph[i].size() ; j++){
+            Neuron * node = graph[i][j];
+            vector<Edge *> edges = node->getInEdgeList();
+            float sum = 0.0;
+            for (int k = 0 ; k < edges.size() ; k++){
+                sum += (edges[k]->getIn)->getVal()*(edges[k]->getVal());
+            }
+            node->setVal(sigmoid(sum));
+        }
+    }
+    return;
+}
+
+float Network::lossFunction(int index){
+    
+}
+
+void Network::train(int epochs, float learning_rate){
+    int data_size = data.size();
+    for (int i = 0 ; i < epochs ; i++){
+        for (int j = 0 ; j < data_size; j++){
+            loadInput(j);
+            forwardPropagation();
+            float loss = lossFunction(j);
+            backwardPropagation(loss);
+        }
+    }
 }
 
 void Network::printNetwork(){
