@@ -9,6 +9,14 @@ float Neuron::getVal(){
     return val;
 }
 
+void Neuron::setError(float new_error){
+    this->error = new_error;
+}
+
+float Neuron::getError(){
+    return this->error;
+}
+
 void Neuron::setVal(float newval){
     this->val = newval;
     return;
