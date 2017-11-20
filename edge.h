@@ -6,15 +6,19 @@ class Neuron;
 
 class Edge{
     private:
-        float val;
+        float weight;
+        float delta; //change in weight value
         Neuron * in;
         Neuron * out;
    public:
-        Edge(float val, Neuron * in, Neuron * out);
-        float getVal();
-        void setVal(float newval);
+        Edge(float weight, Neuron * in, Neuron * out);
+        float getWeight();
+        float getDelta();
+        void setWeight(float new_weight);
+        void setDelta(float new_delta);
         Neuron * getIn();
         Neuron * getOut();
+
 };
 
 #endif
