@@ -85,7 +85,7 @@ vector<vector<float> > Network::getData(){
 
 void Network::loadInput(int index){
     for (int i = 0 ; i < graph[0].size(); i++){
-        graph[0][i] = data[index][i];
+        graph[0][i]->setVal(data[index][i]);
     }
     return;
 }
@@ -102,9 +102,9 @@ void Network::forwardPropagation(){
             vector<Edge *> edges = node->getInEdgeList();
             float sum = 0.0;
             for (int k = 0 ; k < edges.size() ; k++){
-                sum += (edges[k]->getIn)->getVal()*(edges[k]->getWeight());
+                sum += (edges[k]->getIn())->getVal()*(edges[k]->getWeight());
             }
-            node->setVal(sigmoid(sum, false));
+            node->setVal(sigmoid(sum));
         }
     }
     return;
@@ -124,13 +124,13 @@ float Network::lossFunction(int index){
         float node_error = (label-output)*output*(1-output);
         node->setError(node_error);
         
-        l2_loss += sqr(label-output)/2;
+        l2_loss += pow((label-output),2)/2 ;
     }
     
     return l2_loss;
 }
 
-void Network::backwardPropagatio(float learning_rate){
+void Network::backwardPropagation(float learning_rate){
     //updating weights of last layer;
     // delta_w = error * output of incoming layer;
     int N = graph.size();
@@ -168,6 +168,7 @@ void Network::backwardPropagatio(float learning_rate){
                 lsum += (edges[k]->getWeight())*(node_error);
                 float new_weight = edges[k]->getWeight() + learning_rate*(delta_weight);
                 edges[k]->setWeight(new_weight);
+                //if (k ==0) cout<<edges[k]->getWeight()<<" "<<delta_weight<<endl;
             }
         }
         // Set sum to lsum, to be used for calculation layer error of further layers;
@@ -180,15 +181,14 @@ void Network::backwardPropagatio(float learning_rate){
 void Network::train(int epochs, float learning_rate){
     int data_size = data.size();
     for (int i = 0 ; i < epochs ; i++){
-        cout<<"Epoch : "<<i<<endl;
+        float loss = 0.0;
         for (int j = 0 ; j < data_size; j++){
             loadInput(j);
             forwardPropagation();
-            float loss = lossFunction(j);
+            loss += lossFunction(j);
             backwardPropagation(learning_rate);
-            cout<<j<<"\t"<<loss<<endl;
         }
-        cout<<endl;
+        if (i%100 == 0) cout<<"Epoch "<<i<<":\t"<<loss<<endl;
     }
 }
 
