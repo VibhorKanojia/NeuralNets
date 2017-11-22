@@ -1,12 +1,12 @@
 #include "network.h"
 #include <vector>
-
+#include <iostream>
 using namespace std;
 
 float LEARNING_RATE = 0.5;
-int EPOCHS = 100000;
+int EPOCHS = 20000;
 int NUM_INPUTS = 8;
-int NUM_OUTPUTS = 1;
+int NUM_OUTPUTS = 3;
 int NUM_LAYERS = 3;
 
 int main(){
@@ -17,7 +17,8 @@ int main(){
     num_neurons.push_back(NUM_OUTPUTS);
 
     Network * nn = new Network(NUM_LAYERS, num_neurons);
-    nn->loadData("data/train_shuffled.csv", ",");
-    nn->train(EPOCHS, LEARNING_RATE); 
+    nn->train("data/train.csv", ",", EPOCHS, LEARNING_RATE); 
+    float accuracy = nn->test("data/test.csv",",");
+    cout<<"Accuracy :"<<accuracy<<endl;
     return 0;
 }
