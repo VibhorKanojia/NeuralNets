@@ -95,6 +95,38 @@ float Network::sigmoid(float value){
     return (1/(1+exp(-value)));
 }
 
+bool Network::isCorrect(int index){
+    int N = graph.size();
+    int out_neurons = graph[N-1].size();
+    int input_size = data[index].size();
+    bool flag = 1;
+    for (int i = 0 ; i < out_neurons; i++){
+        Neuron * node = graph[N-1][i];
+        float label = round(data[index][input_size + i-out_neurons]);
+        float output = round(node->getVal());
+        cout<<label<<" "<<output<<" | ";
+        if (label != output) flag = 0; 
+    }
+    cout<<endl;
+    return flag; 
+ }
+
+float Network::test(string path, string delimiter){
+    data.clear();
+    loadData(path, delimiter);
+    int data_size = data.size();
+    int correct = 0;
+    cout<<endl;
+    cout<<"Testing on "<<data_size<<" examples"<<endl;
+    for (int i = 0 ; i < data_size; i++){
+        loadInput(i);
+        forwardPropagation();
+        if (isCorrect(i)) correct++;
+    }
+   cout<<correct<<" "<<data_size<<endl; 
+   return 100*(correct/(float)data_size); 
+}
+
 void Network::forwardPropagation(){
     for (int i = 1 ; i < graph.size(); i++){
         for (int j = 0; j < graph[i].size() ; j++){
@@ -178,7 +210,9 @@ void Network::backwardPropagation(float learning_rate){
     return;
 }
 
-void Network::train(int epochs, float learning_rate){
+void Network::train(string path, string delimiter, int epochs, float learning_rate){
+    data.clear();
+    loadData(path, delimiter);
     int data_size = data.size();
     for (int i = 0 ; i < epochs ; i++){
         float loss = 0.0;

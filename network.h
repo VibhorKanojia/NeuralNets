@@ -16,12 +16,14 @@ class Network{
         float lossFunction(int index);
         void backwardPropagation(float learning_rate);
         float sigmoid(float value);
+        void loadData(string path,string delimiter);
+        bool isCorrect(int index);
 
     public:
         Network(int NUM_LAYERS, vector<int> NUM_NEURONS);
-        void loadData(string path,string delimiter);
         vector<vector<float> > getData();
-        void train(int epochs, float learning_rate); 
+        void train(string path, string delimiter, int epochs, float learning_rate);
+        float test(string path, string delimiter); 
         void printData();
         void printNetwork();
 };
