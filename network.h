@@ -13,15 +13,15 @@ class Network{
         vector<vector<float> > data;
         void loadInput(int index);
         void forwardPropagation();
-        float lossFunction();
-        void backwardPropagation();
+        float lossFunction(int index);
+        void backwardPropagation(float learning_rate);
         float sigmoid(float value);
 
     public:
         Network(int NUM_LAYERS, vector<int> NUM_NEURONS);
         void loadData(string path,string delimiter);
         vector<vector<float> > getData();
-        void train(); 
+        void train(int epochs, float learning_rate); 
         void printData();
         void printNetwork();
 };
